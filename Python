@@ -1,0 +1,26 @@
+class Solution:
+    def findMedianSortedArrays(self, nums1: List[int], nums2: List[int]) -> float:
+        def find(a,b,k):
+            if not a:
+                return b[k]
+            if not b:
+                return a[k]
+            ia, ib = len(a) // 2 , len(b) // 2
+            ma, mb = a[ia], b[ib]
+            if ia + ib < k:
+                if ma > mb:
+                    return find(a, b[ib + 1:], k - ib - 1)
+                else:
+                    return find(a[ia + 1:], b, k - ia - 1)
+            else:
+                if ma > mb:
+                    return find(a[:ia], b, k)
+                else:
+                    return find(a, b[:ib], k)
+            
+        
+        lens = len(nums1)+len(nums2)
+        if lens%2 == 1:
+            return find(nums1,nums2,lens//2)
+        else:
+            return (find(nums1,nums2,lens//2)+find(nums1,nums2,lens//2-1))/2
